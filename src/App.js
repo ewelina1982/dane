@@ -1,27 +1,41 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+
+// pseudo rosnąca baza danych
+const data = [
+  { id: 1, title: "wiadomośc 1", body: "zawartosc wiadomosci 1 ..." },
+  { id: 2, title: "wiadomośc 2", body: "zawartosc wiadomosci 2 ..." }
+];
+
+setInterval(() => {
+  const index = data.length + 1;
+  data.push({
+    id: index,
+    title: `wiadomośc ${index} `,
+    body: `zawartosc wiadomosci ${index} ...`
+  });
+}, 4000);
 
 class App extends Component {
+  state = {
+    comments: [...data]
+  };
+  getData = () => {
+    this.setState({
+      comments: [...data]
+    });
+  };
+  componentDidMount() {
+    setInterval(this.getData, 2000);
+  }
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+    const comments = this.state.comments.map(comment => (
+      <div key={comment.id}>
+        <h4>{comment.title}</h4>
+        <div>{comment.body}</div>
       </div>
-    );
+    ));
+    return <div>{comments}</div>;
   }
 }
 
